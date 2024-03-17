@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# Two ways of getting the previous values
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Using two useStates [example](https://www.geeksforgeeks.org/how-to-get-previous-state-in-reactjs-functional-component/)
 
-In the project directory, you can run:
+// Filename - App.js
 
-### `npm start`
+import React, { useState } from "react";
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+const App = () => {
+const [number, setNumber] = useState(0);
+const [previousValue, setPreviousValue] =
+useState(null);
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+    return (
+        <div
+            style={{
+                textAlign: "center",
+                alignItems: "center",
+                margin: "auto",
+            }}
+        >
+            <h1 style={{ color: "green" }}>
+                GeeksforGeeks
+            </h1>
+            <h3>
+                React Example to excess previous state in
+                Funtional components
+            </h3>
+            <h4>number: {number}</h4>
+            <h4>previous number: {previousValue}</h4>
+            <button
+                onClick={() =>
+                    setNumber((previous) => {
+                        setPreviousValue(previous);
+                        return previous + 1;
+                    })
+                }
+            >
+                increment
+            </button>
+        </div>
+    );
 
-### `npm test`
+};
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+export default App;
 
-### `npm run build`
+- But this means each time, the program renders twice
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## useEffect + useRef [example](https://www.youtube.com/watch?v=t2ypzz6gJm0)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+import React, {useState, useEffect, useRef} from 'react';
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+export function App(props) {
+const [number, setNumber] = useState(0);
+const previousValue = useRef(null);
 
-### `npm run eject`
+useEffect(() => {previousValue.current = number})
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+    return (
+        <div>
+            <h4>number: {number}</h4>
+            <h4>Render count: {previousValue.current}</h4>
+            <button
+                onClick={() =>
+                    setNumber((previous) => {
+                        return previous + 1;
+                    })
+                }
+            >
+                increment
+            </button>
+        </div>
+    );
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+}
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- This method only render once - by useState. useEffect API is invoked when rendering happens. useRef doesn't trigger a rerendering.
