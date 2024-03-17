@@ -76,3 +76,40 @@ useEffect(() => {previousValue.current = number})
 }
 ```
 - **This method only render once - by useState. useEffect API is invoked when rendering happens. useRef doesn't trigger a rerendering.**
+
+## Better explanation
+```
+import React, {useState, useEffect, useRef} from 'react';
+
+export function App(props) {
+  const [name, setName] = useState("");
+  // const [preVal, setPreVal] = useState(null)
+  const previousValue = useRef(null);
+
+  useEffect(() => {
+    console.log(name)
+    previousValue.current = name;
+  }, [name])
+ 
+    return (
+        <div>
+          <input value={name} onChange={(e) => setName(() => {
+            // setPreVal(prename);
+            return e.target.value
+          })} />
+          <div> My name is {name} and it used to be {previousValue.current} </div>
+        </div>
+    );
+}
+```
+### Keep three things in mind
+1. useState() causes re-render.
+2. useRef() doesn't cause re-render.
+3. useEffect() runs after re-render or its input exists and changes
+
+### Logic flow:
+1. name = "" previousValue = null.
+2. Put "a" in the text field, setName() runs and changes the value of name = "a". Component renders, {name} is "a", but {previousValue.current} is still "null" or empty.
+3. Because component rendered, useEffect was invoked and set previousValue.current = "a" behind the seen.
+4. Add "b" after "a" in the text field. setName() runs and changes the value of name = "ab". Component renders, {name} is "ab", now {previousValue.current} is "a".
+5. Compnent rendered, useEffect was invoked and set previousValue.current = "ab" behine the seen. 
