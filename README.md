@@ -3,15 +3,14 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Using two useStates [example](https://www.geeksforgeeks.org/how-to-get-previous-state-in-reactjs-functional-component/)
-
+```
 // Filename - App.js
 
 import React, { useState } from "react";
 
 const App = () => {
 const [number, setNumber] = useState(0);
-const [previousValue, setPreviousValue] =
-useState(null);
+const [previousValue, setPreviousValue] = useState(null);
 
     return (
         <div
@@ -46,11 +45,11 @@ useState(null);
 };
 
 export default App;
-
-- But this means each time, the program renders twice
+```
+- **But this means each time, the program renders twice**
 
 ## useEffect + useRef [example](https://www.youtube.com/watch?v=t2ypzz6gJm0)
-
+```
 import React, {useState, useEffect, useRef} from 'react';
 
 export function App(props) {
@@ -74,7 +73,6 @@ useEffect(() => {previousValue.current = number})
             </button>
         </div>
     );
-
 }
-
-- This method only render once - by useState. useEffect API is invoked when rendering happens. useRef doesn't trigger a rerendering.
+```
+- **This method only render once - by useState. useEffect API is invoked when rendering happens. useRef doesn't trigger a rerendering.**
